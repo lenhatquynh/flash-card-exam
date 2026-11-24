@@ -1,122 +1,152 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import rawQuestions from './data/questions.json'
+import type {
+  ExamAnswer,
+  ExamConfig,
+  ExamQuestion,
+  ExamResult,
+  Question,
+  StudyState,
+} from './lib/types'
+import {
+  DEFAULT_EXAM_CONFIG,
+  loadExamAttempts,
+  loadExamConfig,
+  loadStudyState,
+  pushExamAttempt,
+  resetProgress,
+  saveExamConfig,
+  saveStudyState,
+} from './lib/store'
+import { buildResult, loadCorrectAnswers, sampleExam } from './lib/exam'
+import { HomeView } from './features/home/HomeView'
+import { StudyView } from './features/study/StudyView'
+import { ExamSetup } from './features/exam/ExamSetup'
+import { ExamRunner } from './features/exam/ExamRunner'
+import { ExamResults } from './features/exam/ExamResults'
 
-function App() {
-  const [count, setCount] = useState(0)
+const questions = rawQuestions as Question[]
+
+type View = 'home' | 'study' | 'exam'
+type ExamPhase = 'setup' | 'running' | 'results'
+
+export default function App() {
+  const [view, setView] = useState<View>('home')
+  const [examPhase, setExamPhase] = useState<ExamPhase>('setup')
+
+  const [study, setStudy] = useState<StudyState>(() => loadStudyState())
+  const [examConfig, setExamConfig] = useState<ExamConfig>(() => loadExamConfig())
+  const [attempts, setAttempts] = useState<ExamResult[]>(() => loadExamAttempts())
+
+  const [examQuestions, setExamQuestions] = useState<ExamQuestion[]>([])
+  const [lastResult, setLastResult] = useState<ExamResult | null>(null)
+
+  const byId = useMemo(() => new Map(questions.map((q) => [q.id, q])), [])
+
+  // The question bank is fixed, so the correct answers can be registered once.
+  useEffect(() => {
+    loadCorrectAnswers(questions)
+  }, [])
+
+  const updateStudy = useCallback((next: StudyState) => {
+    setStudy(next)
+    saveStudyState(next)
+  }, [])
+
+  const startExam = useCallback(
+    (config: ExamConfig) => {
+      setExamConfig(config)
+      saveExamConfig(config)
+      setExamQuestions(sampleExam(questions, config))
+      setExamPhase('running')
+      setView('exam')
+    },
+    [],
+  )
+
+  const finishExam = useCallback(
+    (answers: Record<string, ExamAnswer>, timedOut: boolean, elapsedSeconds: number) => {
+      const result = buildResult({
+        config: examConfig,
+        questions: examQuestions,
+        answers,
+        timedOut,
+        elapsedSeconds,
+      })
+      setLastResult(result)
+      setAttempts(pushExamAttempt(result))
+      setExamPhase('results')
+    },
+    [examConfig, examQuestions],
+  )
+
+  const resetAll = useCallback(() => {
+    resetProgress()
+    setStudy({ cursor: 0, grades: {}, lastVisitedId: null })
+    setExamConfig({ ...DEFAULT_EXAM_CONFIG })
+    setAttempts([])
+    setLastResult(null)
+    setExamPhase('setup')
+  }, [])
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="min-h-svh bg-canvas text-ink">
+      {view === 'home' && (
+        <HomeView
+          questions={questions}
+          study={study}
+          attempts={attempts}
+          onStartStudy={() => setView('study')}
+          onStartExam={() => {
+            setExamPhase('setup')
+            setView('exam')
+          }}
+          onResetProgress={resetAll}
+        />
+      )}
 
-      <div className="ticks"></div>
+      {view === 'study' && (
+        <StudyView
+          questions={questions}
+          state={study}
+          onStateChange={updateStudy}
+          onExit={() => setView('home')}
+        />
+      )}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      {view === 'exam' && examPhase === 'setup' && (
+        <ExamSetup
+          questions={questions}
+          remembered={examConfig}
+          onStart={startExam}
+          onExit={() => setView('home')}
+        />
+      )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      {view === 'exam' && examPhase === 'running' && (
+        <ExamRunner
+          byId={byId}
+          examQuestions={examQuestions}
+          config={examConfig}
+          onFinish={finishExam}
+          onExit={() => {
+            // The run is discarded; the setup screen keeps the remembered values.
+            setExamPhase('setup')
+          }}
+        />
+      )}
+
+      {view === 'exam' && examPhase === 'results' && lastResult && (
+        <ExamResults
+          result={lastResult}
+          byId={byId}
+          onExit={() => {
+            setExamPhase('setup')
+            setView('home')
+          }}
+          onRetry={() => setExamPhase('setup')}
+        />
+      )}
+    </div>
   )
 }
-
-export default App

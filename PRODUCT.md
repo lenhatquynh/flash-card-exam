@@ -14,56 +14,56 @@ Individual candidates preparing for the AWS Certified Solutions Architect – As
 
 flash-card-exam turns a large bank of real AWS SAA-C03 exam questions into an effective study tool, offering two complementary study modes:
 
-- **Flashcards** — reveal the answer, self-grade against the marked correct option, and use spaced repetition so that weak questions resurface more often.
+- **Study** — browse the bank in source order, pick an answer or reveal the correct one, then grade yourself against it.
 - **Practice exam** — a full-length, timed multiple-choice exam with a final score and a review of every question.
 
 Success means the learner converts weak or unseen questions into reliable answers, and can sit the real exam with both knowledge and pacing confidence. The product's outcome is measured in questions correctly answered, not in time spent in the app.
 
 ## Positioning
 
-The content is the asset: 956 real AWS SAA-C03 exam questions with the correct answer marked on each, parsed from exam-prep documents. Most flash-card apps make the user author the deck; this product ships the deck, and adds a spaced-repetition schedule and a realistic timed exam on top of the same question bank. A generic quiz tool could not claim this without the licensed content.
+The content is the asset: 963 real AWS SAA-C03 exam questions with the correct answer marked on each, parsed from exam-prep documents. Most flash-card apps make the user author the deck; this product ships the deck, and adds a realistic timed exam on top of the same question bank. A generic quiz tool could not claim this without the licensed content.
 
 ## Operating Context
 
 - The learner is alone with a phone or a laptop, usually in short sessions, often between other study activities.
-- The full question bank is 956 questions; a single practice exam is a subset, and the question order and selection are a product decision.
+- The full question bank is 963 questions; a single practice exam is a subset, and the question order and selection are a product decision.
 - Questions are long AWS scenario descriptions with four options and one marked correct answer; several require reading carefully to spot the qualifying phrase ("LEAST operational overhead", "FEWEST changes to the code", "MOST operational efficiency").
-- 113 questions mark two correct answers ("choose two"), so the grader must accept a set of selections, not a single choice.
+- 102 questions mark two correct answers ("choose two") and 14 mark three ("choose three"), so the grader must accept a set of selections, not a single choice.
 - Study progress must survive a browser reload and a closed tab; the learner may study across devices but the product does not require an account to be useful.
 
 ## Capabilities and Constraints
 
-- **Question bank**: 956 parsed SAA-C03 questions from the five files in `data-source/`, each with four options and the correct answer marked with `✅`. Original numbering runs 1–975 with gaps (45 numbers are absent from the sources, so the bank is not a contiguous 1–1000). 113 questions mark two correct answers ("choose two"); 2 questions carry no marked answer and need one supplied or one excluded.
-- **Two study modes**: flashcards (reveal + self-grade + spaced repetition) and timed practice exam (scoring + full review).
-- **Persistence is browser-only** (localStorage). No accounts, no server, no sync. This is a confirmed constraint, not an open question; cloud sync was considered and deferred.
+- **Question bank**: 963 parsed SAA-C03 questions from the five files in `data-source/`, each with four or five options and the correct answer marked with `✅`. Original numbering runs 1–1019 with gaps (the source omits 51 numbers, so the bank is not contiguous). 102 questions mark two correct answers ("choose two"); 14 mark three.
+- **Two study modes**: study (pick-or-reveal + self-grade) and timed practice exam (scoring + full review).
+- **Persistence is browser-only** (localStorage, three keys under the `fce.v1` namespace: study progress, the last exam setup, and the last 20 finished exams). No accounts, no server, no sync. This is a confirmed constraint, not an open question; cloud sync was considered and deferred.
 - **Language**: the UI and the source questions are both English. Source questions are used verbatim; no translation.
-- **Stack is fixed**: React 19 + TypeScript + Vite + Tailwind CSS v4, already scaffolded in this repo. `lucide-react`, `class-variance-authority`, `cn`, and `shadcn` are installed and available; `src/index.css` still carries the Vite starter theme and must be replaced with the product's own tokens.
-- **The question bank has no parser yet**: `data-source/*.md` is raw markdown with two different header conventions (`**Question**  12` in PART-1, `**Question 312` in PART-2 through PART-5), inline `**bold**` option markup, and `✅` marks. A build-time parser is needed to turn it into structured questions.
-- **Content is authoritative and must not be edited**: question text, option order, and the marked correct answer come from the source documents. The product layers on scheduling, grading, scoring, and progress — it never rewrites, paraphrases, or reorders the exam content itself.
+- **Stack is fixed**: React 19 + TypeScript + Vite + Tailwind CSS v4, already scaffolded in this repo. `lucide-react`, `class-variance-authority`, `cn`, and `shadcn` are installed and available.
+- **The question bank is parsed at build time**: `scripts/parse-questions.mjs` reads `data-source/*.md` — two different header conventions, inline `**bold**` option markup, and `✅` marks — and emits `src/data/questions.json` plus a `data-source/parse-report.md` fix list. The parser refuses to emit a broken question; anything failing the validation gate lands in the report instead.
+- **Content is authoritative and must not be edited**: question text, option order, and the marked correct answer come from the source documents. The product layers on grading, scoring, and progress — it never rewrites, paraphrases, or reorders the exam content itself.
 - **No content library is user-editable**: there is no authoring, importing, or editing of questions in the product.
-- Open product decisions not yet settled: exact exam length and pass threshold for the practice exam; whether a "question of the day" or other passive-review mechanic exists beyond flashcards and exam.
+- **Five questions reference diagrams whose image data was stripped from the source.** They render a placeholder that names the missing file, never a broken image.
 
 ## Brand Commitments
 
 - Product name: **flash-card-exam**.
-- Voice: a focused study tool for a solo learner. Clear, direct, and instructional — it explains why an answer is right, not just that it is right. No gamified spectacle, no streaks, no confetti, no leaderboards; the learner is preparing for a professional certification, and the product's tone should respect that.
+- Voice: a focused study tool for a solo learner. Clear, direct, and instructional. No gamified spectacle, no streaks, no confetti, no leaderboards; the learner is preparing for a professional certification, and the product's tone should respect that.
 - The interface is English-only.
 
 ## Evidence on Hand
 
-- `data-source/AWS Certified Solutions Architect – Associate (SAA-C03) - PART-1.docx.md` through `PART-5.docx.md` — the complete question bank (956 parsed questions, original numbers 1–975 with gaps) with correct answers marked. The authoritative content. Two questions need attention before they can be served: PART-1 Q192 references two missing diagrams and its option A is malformed (`1.` instead of `A.`), and PART-4 Q733 is truncated mid-option-D with no marked answer.
+- `data-source/AWS Certified Solutions Architect – Associate (SAA-C03) - PART-1.docx.md` through `PART-5.docx.md` — the complete question bank (963 parsed questions, original numbers 1–1019 with gaps) with correct answers marked. The authoritative content.
 - No testimonials, customer logos, usage metrics, benchmark scores, or press. Future work must not fabricate any of these.
-- No brand assets, logo, or photography beyond the default Vite/React scaffold assets in `src/assets/`, which are template placeholders, not product identity.
-- No design system exists yet: `src/App.tsx` and `src/App.css` are the unmodified Vite starter template, and `src/index.css` holds the starter's placeholder palette (purple accent, system fonts). There is no incumbent visual world to preserve; the surface is greenfield. Tailwind CSS v4 is wired up, so tokens are the only thing standing between the scaffold and a real system.
+- No brand assets, logo, or photography. The starter Vite/React assets were removed as template placeholders, not product identity.
+- The design system now exists: `src/index.css` holds a token layer (a neutral surface ramp, one accent, and a semantic state vocabulary, with dark mode via `prefers-color-scheme`), and `src/components/ui/` holds the shared primitives. `src/App.tsx` is the product shell.
 
 ## Product Principles
 
 1. **The exam content is the product.** Everything in the interface exists to get a learner closer to answering the next real exam question correctly. UI that does not move that number does not earn its space.
 2. **One question at a time, always.** Both modes present a single question with its full scenario text. Never split a scenario across a card, a panel, and a tooltip.
-3. **Every answer is explained.** A correct mark alone teaches nothing. Each question must reveal why the marked option is right and why the plausible-looking distractors fail, because AWS exams are built from near-miss distractors.
-4. **Progress is visible and local.** The learner can always see what they know, what they are still missing, and what their practice-exam score would be — without creating an account.
-5. **Respect the exam's own difficulty.** No assistance during a timed exam that the real exam would not offer; no timer that pressures before the learner is ready.
+3. **Progress is visible and local.** The learner can always see what they know, what they are still missing, and what their practice-exam score would be — without creating an account.
+4. **Respect the exam's own difficulty.** No assistance during a timed exam that the real exam would not offer; no timer that pressures before the learner is ready.
+5. **Grading is exact, never generous.** A multi-answer question is right only when the selected set is exactly the correct set. There is no partial credit, and the results screen says so.
 
 ## Accessibility & Inclusion
 
-No product-specific accessibility requirement has been established yet. Baseline web accessibility (keyboard operation of the flashcard reveal and exam navigation, sufficient contrast, screen-reader-readable question and option text) is expected as a matter of craft, and the self-grading flow must not depend on color alone to signal correct versus incorrect.
+No product-specific accessibility requirement has been established yet. Baseline web accessibility is expected as a matter of craft: the whole exam is operable from the keyboard (keys 1–5 select an option, Space reveals, the arrow keys move between questions, Enter checks), contrast meets WCAG AA in both light and dark schemes, and the self-grading flow never depends on colour alone — the correct, incorrect, and selected states each carry a distinct border treatment and a written label as well as a hue.
