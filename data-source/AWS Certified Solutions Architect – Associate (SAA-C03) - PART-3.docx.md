@@ -185,7 +185,7 @@ A company uses AWS Organizations. The company wants to operate some of its AWS a
 
 Which combination of solutions will meet these requirements? (Choose three.)
 
-A. Use AWS Budgets to create a budget. Set the budget amount under the Cost and Usage Reports section of the required AWS accounts.
+A. Use AWS Budgets to create a budget. Set the budget amount under the Cost and Usage Reports section of the required AWS accounts. ✅
 
 B. Use AWS Budgets to create a budget. Set the budget amount under the Billing dashboards of the required AWS accounts.
 

@@ -802,7 +802,9 @@ B. Configure a VPC with two private subnets and two NAT gateways across two Avai
 
 C. Use an Auto Scaling group to launch the EC2 instances in public subnets across two Availability Zones. Deploy an RDS Multi-AZ DB instance in private subnets.
 
-D. Configure a VPC with one public subnet, one private subnet, and two NAT gateways across two Availability Zones. Deploy an Application Load Balancer in the public subnet. D. Configure a VPC with two public subnets, two private subnets, and two NAT gateways across two Availability Zones. Deploy an Application Load Balancer in the public subnets.
+D. Configure a VPC with one public subnet, one private subnet, and two NAT gateways across two Availability Zones. Deploy an Application Load Balancer in the public subnet.
+
+E. Configure a VPC with two public subnets, two private subnets, and two NAT gateways across two Availability Zones. Deploy an Application Load Balancer in the public subnets. ✅
 
 **Question**  51
 
@@ -1550,368 +1552,6 @@ Which solution will meet these requirements?
 A. Configure provisioned concurrency for the Lambda function. Modify the database to be a global database in multiple AWS Regions.  
 B. Use Amazon RDS Proxy to create a proxy for the database. Modify the Lambda function to use the RDS Proxy endpoint instead of the database endpoint. ✅  
 C. Create a read replica for the database in a different AWS Region. Use query string parameters in API Gateway to route traffic to the read replica.  
-D. Migrate the data from Aurora PostgreSQL to Amazon DynamoDB by using AWS Database Migration Service (AWS DMS). Modify the Lambda function to use the DynamoDB table.
-
-**Question**  81
-
-A company sells ringtones created from clips of popular songs. The files containing the ringtones are stored in Amazon S3 Standard and are at least 128 KB in size. The company has millions of files, but downloads are infrequent for ringtones older than 90 days. The company needs to save money on storage while keeping the most accessed files readily available for its users.
-
-Which action should the company take to meet these requirements MOST cost-effectively?
-
-A. Configure S3 Standard-Infrequent Access (S3 Standard-IA) storage for the initial storage tier of the objects.
-
-B. Move the files to S3 Intelligent-Tiering and configure it to move objects to a less expensive storage tier after 90 days.
-
-C. Configure S3 inventory to manage objects and move them to S3 Standard-Infrequent Access (S3 Standard-1A) after 90 days.
-
-D. Implement an S3 Lifecycle policy that moves the objects from S3 Standard to S3 Standard-Infrequent Access (S3 Standard-1A) after 90 days. ✅
-
-**Question**  82
-
-A company needs to save the results from a medical trial to an Amazon S3 repository. The repository must allow a few scientists to add new files and must restrict all other users to read-only access. No users can have the ability to modify or delete any files in the repository. The company must keep every file in the repository for a minimum of 1 year after its creation date.
-
-Which solution will meet these requirements?
-
-A. Use S3 Object Lock in governance mode with a legal hold of 1 year.
-
-B. Use S3 Object Lock in compliance mode with a retention period of 365 days. ✅
-
-C. Use an IAM role to restrict all users from deleting or changing objects in the S3 bucket. Use an S3 bucket policy to only allow the IAM role.
-
-D. Configure the S3 bucket to invoke an AWS Lambda function every time an object is added. Configure the function to track the hash of the saved object so that modified objects can be marked accordingly.
-
-**Question**  83
-
-A large media company hosts a web application on AWS. The company wants to start caching confidential media files so that users around the world will have reliable access to the files. The content is stored in Amazon S3 buckets. The company must deliver the content quickly, regardless of where the requests originate geographically.
-
-Which solution will meet these requirements?
-
-A. Use AWS DataSync to connect the S3 buckets to the web application.
-
-B. Deploy AWS Global Accelerator to connect the S3 buckets to the web application.
-
-C. Deploy Amazon CloudFront to connect the S3 buckets to CloudFront edge servers. ✅
-
-D. Use Amazon Simple Queue Service (Amazon SQS) to connect the S3 buckets to the web application.
-
-**Question**  84
-
-A company produces batch data that comes from different databases. The company also produces live stream data from network sensors and application APIs. The company needs to consolidate all the data into one place for business analytics. The company needs to process the incoming data and then stage the data in different Amazon S3 buckets. Teams will later run one-time queries and import the data into a business intelligence tool to show key performance indicators (KPIs).
-
-Which combination of steps will meet these requirements with the LEAST operational overhead? (Choose two.)
-
-A. Use Amazon Athena for one-time queries. Use Amazon QuickSight to create dashboards for KPIs. ✅
-
-B. Use Amazon Kinesis Data Analytics for one-time queries. Use Amazon QuickSight to create dashboards for KPIs.
-
-C. Create custom AWS Lambda functions to move the individual records from the databases to an Amazon Redshift cluster.
-
-D. Use an AWS Glue extract, transform, and load (ETL) job to convert the data into JSON format. Load the data into multiple Amazon OpenSearch Service (Amazon Elasticsearch Service) clusters.
-
-E. Use blueprints in AWS Lake Formation to identify the data that can be ingested into a data lake. Use AWS Glue to crawl the source, extract the data, and load the data into Amazon S3 in Apache Parquet format. ✅
-
-**Question**  85
-
-A company stores data in an Amazon Aurora PostgreSQL DB cluster. The company must store all the data for 5 years and must delete all the data after 5 years. The company also must indefinitely keep audit logs of actions that are performed within the database. Currently, the company has automated backups configured for Aurora.
-
-Which combination of steps should a solutions architect take to meet these requirements? (Choose two.)
-
-A. Take a manual snapshot of the DB cluster. ✅
-
-B. Create a lifecycle policy for the automated backups.
-
-C. Configure automated backup retention for 5 years.
-
-D. Configure an Amazon CloudWatch Logs export for the DB cluster. ✅
-
-E. Use AWS Backup to take the backups and to keep the backups for 5 years.
-
-**Question**  86
-
-A solutions architect is optimizing a website for an upcoming musical event. Videos of the performances will be streamed in real time and then will be available on demand. The event is expected to attract a global online audience.
-
-Which service will improve the performance of both the real-time and on-demand streaming?
-
-A. Amazon CloudFront ✅
-
-B. AWS Global Accelerator
-
-C. Amazon Route 53
-
-D. Amazon S3 Transfer Acceleration
-
-**Question**  87
-
-A company is running a publicly accessible serverless application that uses Amazon API Gateway and AWS Lambda. The application’s traffic recently spiked due to fraudulent requests from botnets.
-
-Which steps should a solutions architect take to block requests from unauthorized users? (Choose two.)
-
-A. Create a usage plan with an API key that is shared with genuine users only. ✅
-
-B. Integrate logic within the Lambda function to ignore the requests from fraudulent IP addresses.
-
-C. Implement an AWS WAF rule to target malicious requests and trigger actions to filter them out. ✅
-
-D. Convert the existing public API to a private API. Update the DNS records to redirect users to the new API endpoint.
-
-E. Create an IAM role for each user attempting to access the API. A user will assume the role when making the API call.
-
-**Question**  88
-
-A company hosts a data lake on AWS. The data lake consists of data in Amazon S3 and Amazon RDS for PostgreSQL. The company needs a reporting solution that provides data visualization and includes all the data sources within the data lake. Only the company's management team should have full access to all the visualizations. The rest of the company should have only limited access.
-
-Which solution will meet these requirements?
-
-A. Create an analysis in Amazon QuickSight. Connect all the data sources and create new datasets. Publish dashboards to visualize the data. Share the dashboards with the appropriate IAM roles.
-
-B. Create an analysis in Amazon QuickSight. Connect all the data sources and create new datasets. Publish dashboards to visualize the data. Share the dashboards with the appropriate users and groups. ✅
-
-C. Create an AWS Glue table and crawler for the data in Amazon S3. Create an AWS Glue extract, transform, and load (ETL) job to produce reports. Publish the reports to Amazon S3. Use S3 bucket policies to limit access to the reports.
-
-D. Create an AWS Glue table and crawler for the data in Amazon S3. Use Amazon Athena Federated Query to access data within Amazon RDS for PostgreSQL. Generate reports by using Amazon Athena. Publish the reports to Amazon S3. Use S3 bucket policies to limit access to the reports.
-
-**Question**  89
-
-An ecommerce company hosts its analytics application in the AWS Cloud. The application generates about 300 MB of data each month. The data is stored in JSON format. The company is evaluating a disaster recovery solution to back up the data. The data must be accessible in milliseconds if it is needed, and the data must be kept for 30 days.
-
-Which solution meets these requirements MOST cost-effectively?
-
-A. Amazon OpenSearch Service (Amazon Elasticsearch Service)
-
-B. Amazon S3 Glacier
-
-C. Amazon S3 Standard ✅
-
-D. Amazon RDS for PostgreSQL
-
-**Question**  90
-
-A company has a small Python application that processes JSON documents and outputs the results to an on-premises SQL database. The application runs thousands of times each day. The company wants to move the application to the AWS Cloud. The company needs a highly available solution that maximizes scalability and minimizes operational overhead.
-
-Which solution will meet these requirements?
-
-A. Place the JSON documents in an Amazon S3 bucket. Run the Python code on multiple Amazon EC2 instances to process the documents. Store the results in an Amazon Aurora DB cluster.
-
-B. Place the JSON documents in an Amazon S3 bucket. Create an AWS Lambda function that runs the Python code to process the documents as they arrive in the S3 bucket. Store the results in an Amazon Aurora DB cluster. ✅
-
-C. Place the JSON documents in an Amazon Elastic Block Store (Amazon EBS) volume. Use the EBS Multi-Attach feature to attach the volume to multiple Amazon EC2 instances. Run the Python code on the EC2 instances to process the documents. Store the results on an Amazon RDS DB instance.
-
-D. Place the JSON documents in an Amazon Simple Queue Service (Amazon SQS) queue as messages. Deploy the Python code as a container on an Amazon Elastic Container Service (Amazon ECS) cluster that is configured with the Amazon EC2 launch type. Use the container to process the SQS messages. Store the results on an Amazon RDS DB instance.
-
-**Question**  91
-
-A company wants to use high performance computing (HPC) infrastructure on AWS for financial risk modeling. The company’s HPC workloads run on Linux. Each HPC workflow runs on hundreds of Amazon EC2 Spot Instances, is short-lived, and generates thousands of output files that are ultimately stored in persistent storage for analytics and long-term future use.
-
-The company seeks a cloud storage solution that permits the copying of on-premises data to long-term persistent storage to make data available for processing by all EC2 instances. The solution should also be a high performance file system that is integrated with persistent storage to read and write datasets and output files.
-
-Which combination of AWS services meets these requirements?
-
-A. Amazon FSx for Lustre integrated with Amazon S3 ✅
-
-B. Amazon FSx for Windows File Server integrated with Amazon S3
-
-C. Amazon S3 Glacier integrated with Amazon Elastic Block Store (Amazon EBS)
-
-D. Amazon S3 bucket with a VPC endpoint integrated with an Amazon Elastic Block Store (Amazon EBS) General Purpose SSD (gp2) volume
-
-**Question**  92
-
-A company is building a containerized application on premises and decides to move the application to AWS. The application will have thousands of users soon after it is deployed. The company is unsure how to manage the deployment of containers at scale. The company needs to deploy the containerized application in a highly available architecture that minimizes operational overhead.
-
-Which solution will meet these requirements?
-
-A. Store container images in an Amazon Elastic Container Registry (Amazon ECR) repository. Use an Amazon Elastic Container Service (Amazon ECS) cluster with the AWS Fargate launch type to run the containers. Use target tracking to scale automatically based on demand. ✅
-
-B. Store container images in an Amazon Elastic Container Registry (Amazon ECR) repository. Use an Amazon Elastic Container Service (Amazon ECS) cluster with the Amazon EC2 launch type to run the containers. Use target tracking to scale automatically based on demand.
-
-C. Store container images in a repository that runs on an Amazon EC2 instance. Run the containers on EC2 instances that are spread across multiple Availability Zones. Monitor the average CPU utilization in Amazon CloudWatch. Launch new EC2 instances as needed.
-
-D. Create an Amazon EC2 Amazon Machine Image (AMI) that contains the container image. Launch EC2 instances in an Auto Scaling group across multiple Availability Zones. Use an Amazon CloudWatch alarm to scale out EC2 instances when the average CPU utilization threshold is breached.
-
-**Question**  93
-
-A company has two applications: a sender application that sends messages with payloads to be processed and a processing application intended to receive the messages with payloads. The company wants to implement an AWS service to handle messages between the two applications. The sender application can send about 1,000 messages each hour. The messages may take up to 2 days to be processed: If the messages fail to process, they must be retained so that they do not impact the processing of any remaining messages.
-
-Which solution meets these requirements and is the MOST operationally efficient?
-
-A. Set up an Amazon EC2 instance running a Redis database. Configure both applications to use the instance. Store, process, and delete the messages, respectively.
-
-B. Use an Amazon Kinesis data stream to receive the messages from the sender application. Integrate the processing application with the Kinesis Client Library (KCL).
-
-C. Integrate the sender and processor applications with an Amazon Simple Queue Service (Amazon SQS) queue. Configure a dead-letter queue to collect the messages that failed to process. ✅
-
-D. Subscribe the processing application to an Amazon Simple Notification Service (Amazon SNS) topic to receive notifications to process. Integrate the sender application to write to the SNS topic.
-
-**Question**  94
-
-A solutions architect must design a solution that uses Amazon CloudFront with an Amazon S3 origin to store a static website. The company’s security policy requires that all website traffic be inspected by AWS WAF.
-
-How should the solutions architect comply with these requirements?
-
-A. Configure an S3 bucket policy to accept requests coming from the AWS WAF Amazon Resource Name (ARN) only.
-
-B. Configure Amazon CloudFront to forward all incoming requests to AWS WAF before requesting content from the S3 origin.
-
-C. Configure a security group that allows Amazon CloudFront IP addresses to access Amazon S3 only. Associate AWS WAF to CloudFront.
-
-D. Configure Amazon CloudFront and Amazon S3 to use an origin access identity (OAI) to restrict access to the S3 bucket. Enable AWS WAF on the distribution. ✅
-
-**Question**  95
-
-Organizers for a global event want to put daily reports online as static HTML pages. The pages are expected to generate millions of views from users around the world. The files are stored in an Amazon S3 bucket. A solutions architect has been asked to design an efficient and effective solution.
-
-Which action should the solutions architect take to accomplish this?
-
-A. Generate presigned URLs for the files.
-
-B. Use cross-Region replication to all Regions.
-
-C. Use the geoproximity feature of Amazon Route 53\.
-
-D. Use Amazon CloudFront with the S3 bucket as its origin. ✅
-
-**Question**  96
-
-A company runs a production application on a fleet of Amazon EC2 instances. The application reads the data from an Amazon SQS queue and processes the messages in parallel. The message volume is unpredictable and often has intermittent traffic. This application should continually process messages without any downtime.
-
-Which solution meets these requirements MOST cost-effectively?
-
-A. Use Spot Instances exclusively to handle the maximum capacity required.
-
-B. Use Reserved Instances exclusively to handle the maximum capacity required.
-
-C. Use Reserved Instances for the baseline capacity and use Spot Instances to handle additional capacity. ✅
-
-D. Use Reserved Instances for the baseline capacity and use On-Demand Instances to handle additional capacity.
-
-**Question**  97
-
-A security team wants to limit access to specific services or actions in all of the team’s AWS accounts. All accounts belong to a large organization in AWS Organizations. The solution must be scalable and there must be a single point where permissions can be maintained.
-
-What should a solutions architect do to accomplish this?
-
-A. Create an ACL to provide access to the services or actions.
-
-B. Create a security group to allow accounts and attach it to user groups.
-
-C. Create cross-account roles in each account to deny access to the services or actions.
-
-D. Create a service control policy in the root organizational unit to deny access to the services or actions. ✅
-
-**Question**  98
-
-A company is concerned about the security of its public web application due to recent web attacks. The application uses an Application Load Balancer (ALB). A solutions architect must reduce the risk of DDoS attacks against the application.
-
-What should the solutions architect do to meet this requirement?
-
-A. Add an Amazon Inspector agent to the ALB.
-
-B. Configure Amazon Macie to prevent attacks.
-
-C. Enable AWS Shield Advanced to prevent attacks. ✅
-
-D. Configure Amazon GuardDuty to monitor the ALB.
-
-**Question**  99
-
-A company is implementing a new business application. The application runs on two Amazon EC2 instances and uses an Amazon S3 bucket for document storage. A solutions architect needs to ensure that the EC2 instances can access the S3 bucket.
-
-What should the solutions architect do to meet this requirement?
-
-A. Create an IAM role that grants access to the S3 bucket. Attach the role to the EC2 instances. ✅
-
-B. Create an IAM policy that grants access to the S3 bucket. Attach the policy to the EC2 instances.
-
-C. Create an IAM group that grants access to the S3 bucket. Attach the group to the EC2 instances.
-
-D. Create an IAM user that grants access to the S3 bucket. Attach the user account to the EC2 instances.
-
-**Question**  100
-
-A company’s web application is running on Amazon EC2 instances behind an Application Load Balancer. The company recently changed its policy, which now requires the application to be accessed from one specific country only.
-
-Which configuration will meet this requirement?
-
-A. Configure the security group for the EC2 instances.
-
-B. Configure the security group on the Application Load Balancer.
-
-C. Configure AWS WAF on the Application Load Balancer in a VPC. ✅
-
-D. Configure the network ACL for the subnet that contains the EC2 instances.
-
-**Question**  101
-
-A company provides an API to its users that automates inquiries for tax computations based on item prices. The company experiences a larger number of inquiries during the holiday season only that cause slower response times. A solutions architect needs to design a solution that is scalable and elastic.
-
-What should the solutions architect do to accomplish this?
-
-A. Provide an API hosted on an Amazon EC2 instance. The EC2 instance performs the required computations when the API request is made.
-
-B. Design a REST API using Amazon API Gateway that accepts the item names. API Gateway passes item names to AWS Lambda for tax computations. ✅
-
-C. Create an Application Load Balancer that has two Amazon EC2 instances behind it. The EC2 instances will compute the tax on the received item names.
-
-D. Design a REST API using Amazon API Gateway that connects with an API hosted on an Amazon EC2 instance. API Gateway accepts and passes the item names to the EC2 instance for tax computations.
-
-**Question**  102
-
-A solutions architect is creating a new Amazon CloudFront distribution for an application. Some of the information submitted by users is sensitive. The application uses HTTPS but needs another layer of security. The sensitive information should.be protected throughout the entire application stack, and access to the information should be restricted to certain applications.
-
-Which action should the solutions architect take?
-
-A. Configure a CloudFront signed URL.
-
-B. Configure a CloudFront signed cookie.
-
-C. Configure a CloudFront field-level encryption profile. ✅
-
-D. Configure CloudFront and set the Origin Protocol Policy setting to HTTPS Only for the Viewer Protocol Policy.
-
-**Question**  103
-
-A gaming company hosts a browser-based application on AWS. The users of the application consume a large number of videos and images that are stored in Amazon S3. This content is the same for all users.
-
-The application has increased in popularity, and millions of users worldwide accessing these media files. The company wants to provide the files to the users while reducing the load on the origin.
-
-Which solution meets these requirements MOST cost-effectively?
-
-A. Deploy an AWS Global Accelerator accelerator in front of the web servers.
-
-B. Deploy an Amazon CloudFront web distribution in front of the S3 bucket. ✅
-
-C. Deploy an Amazon ElastiCache for Redis instance in front of the web servers.
-
-D. Deploy an Amazon ElastiCache for Memcached instance in front of the web servers.
-
-**Question**  104
-
-A company has a multi-tier application that runs six front-end web servers in an Amazon EC2 Auto Scaling group in a single Availability Zone behind an Application Load Balancer (ALB). A solutions architect needs to modify the infrastructure to be highly available without modifying the application.
-
-Which architecture should the solutions architect choose that provides high availability?
-
-A. Create an Auto Scaling group that uses three instances across each of two Regions.
-
-B. Modify the Auto Scaling group to use three instances across each of two Availability Zones. ✅
-
-C. Create an Auto Scaling template that can be used to quickly create more instances in another Region.
-
-D. Change the ALB in front of the Amazon EC2 instances in a round-robin configuration to balance traffic to the web tier.
-
-**Question**  105
-
-An ecommerce company has an order-processing application that uses Amazon API Gateway and an AWS Lambda function. The application stores data in an Amazon Aurora PostgreSQL database. During a recent sales event, a sudden surge in customer orders occurred. Some customers experienced timeouts, and the application did not process the orders of those customers.
-
-A solutions architect determined that the CPU utilization and memory utilization were high on the database because of a large number of open connections. The solutions architect needs to prevent the timeout errors while making the least possible changes to the application.
-
-Which solution will meet these requirements?
-
-A. Configure provisioned concurrency for the Lambda function. Modify the database to be a global database in multiple AWS Regions.
-
-B. Use Amazon RDS Proxy to create a proxy for the database. Modify the Lambda function to use the RDS Proxy endpoint instead of the database endpoint. ✅
-
-C. Create a read replica for the database in a different AWS Region. Use query string parameters in API Gateway to route traffic to the read replica.
-
 D. Migrate the data from Aurora PostgreSQL to Amazon DynamoDB by using AWS Database Migration Service (AWS DMS). Modify the Lambda function to use the DynamoDB table.
 
 **Question**  106
@@ -2851,11 +2491,11 @@ A solutions architect has created two IAM policies: Policy1 and Policy2. Both po
 
 A cloud engineer is added as an IAM user to the IAM group. Which action will the cloud engineer be able to perform?
 
-1. Deleting IAM users
+A. Deleting IAM users
 
 B. Deleting directories
 
-C. Deleting Amazon EC2 instances
+C. Deleting Amazon EC2 instances ✅
 
 D. Deleting logs from Amazon CloudWatch Logs
 
@@ -2947,7 +2587,7 @@ The company wants to provide its customers with different versions of content ba
 
 Which combination of actions should a solutions architect take to meet these requirements? (Choose two.)
 
-A. Configure Amazon CloudFront to cache multiple versions of the content.
+A. Configure Amazon CloudFront to cache multiple versions of the content. ✅
 
 B. Configure a host header in a Network Load Balancer to forward traffic to different instances.
 
@@ -2983,7 +2623,7 @@ A company is building an application that consists of several microservices. The
 
 Which combination of actions should a solutions architect take to meet these requirements? (Choose two.)
 
-A. Deploy an Amazon Elastic Container Service (Amazon ECS) cluster.
+A. Deploy an Amazon Elastic Container Service (Amazon ECS) cluster. ✅
 
 B. Deploy the Kubernetes control plane on Amazon EC2 instances that span multiple Availability Zones.
 
@@ -3409,63 +3049,6 @@ A. Create an Amazon S3 Standard bucket with access to the web servers.
 B. Configure an Amazon CloudFront distribution with an Amazon S3 bucket as the origin.  
 C. Create an Amazon Elastic File System (Amazon EFS) file system. Mount the EFS file system on all web servers. ✅  
 D. Configure a General Purpose SSD (gp3) Amazon Elastic Block Store (Amazon EBS) volume. Mount the EBS volume to all web servers.
-
-**Question**  231
-
-A company is migrating applications to AWS. The applications are deployed in different accounts. The company manages the accounts centrally by using AWS Organizations. The company's security team needs a single sign-on (SSO) solution across all the company's accounts. The company must continue managing the users and groups in its on-premises self-managed Microsoft Active Directory.
-
-Which solution will meet these requirements?
-
-A. Enable AWS Single Sign-On (AWS SSO) from the AWS SSO console. Create a one-way forest trust or a one-way domain trust to connect the company's self-managed Microsoft Active Directory with AWS SSO by using AWS Directory Service for Microsoft Active Directory.  
-B. Enable AWS Single Sign-On (AWS SSO) from the AWS SSO console. Create a two-way forest trust to connect the company's self-managed Microsoft Active Directory with AWS SSO by using AWS Directory Service for Microsoft Active Directory. ✅  
-C. Use AWS Directory Service. Create a two-way trust relationship with the company's self-managed Microsoft Active Directory.  
-D. Deploy an identity provider (IdP) on premises. Enable AWS Single Sign-On (AWS SSO) from the AWS SSO console.
-
-**Question**  232
-
-A company is using Amazon CloudFront with its website. The company has enabled logging on the CloudFront distribution, and logs are saved in one of the company’s Amazon S3 buckets. The company needs to perform advanced analyses on the logs and build visualizations.
-
-What should a solutions architect do to meet these requirements?
-
-A. Use standard SQL queries in Amazon Athena to analyze the CloudFront logs in the S3 bucket. Visualize the results with AWS Glue.  
-B. Use standard SQL queries in Amazon Athena to analyze the CloudFront logs in the S3 bucket. Visualize the results with Amazon QuickSight. ✅  
-C. Use standard SQL queries in Amazon DynamoDB to analyze the CloudFront logs in the S3 bucket. Visualize the results with AWS Glue.  
-D. Use standard SQL queries in Amazon DynamoDB to analyze the CloudFront logs in the S3 bucket. Visualize the results with Amazon QuickSight.
-
-**Question**  233
-
-A company runs a fleet of web servers using an Amazon RDS for PostgreSQL DB instance. After a routine compliance check, the company sets a standard that requires a recovery point objective (RPO) of less than 1 second for all its production databases.
-
-Which solution meets these requirements?
-
-A. Enable a Multi-AZ deployment for the DB instance. ✅  
-B. Enable auto scaling for the DB instance in one Availability Zone.  
-C. Configure the DB instance in one Availability Zone, and create multiple read replicas in a separate Availability Zone.  
-D. Configure the DB instance in one Availability Zone, and configure AWS Database Migration Service (AWS DMS) change data capture (CDC) tasks.
-
-**Question**  234
-
-A company runs a web application that is deployed on Amazon EC2 instances in the private subnet of a VPC. An Application Load Balancer (ALB) that extends across the public subnets directs web traffic to the EC2 instances. The company wants to implement new security measures to restrict inbound traffic from the ALB to the EC2 instances while preventing access from any other source inside or outside the private subnet of the EC2 instances.
-
-Which solution will meet these requirements?
-
-A. Configure a route in a route table to direct traffic from the internet to the private IP addresses of the EC2 instances.  
-B. Configure the security group for the EC2 instances to only allow traffic that comes from the security group for the ALB. ✅  
-C. Move the EC2 instances into the public subnet. Give the EC2 instances a set of Elastic IP addresses.  
-D. Configure the security group for the ALB to allow any TCP traffic on any port.
-
-**Question**  235
-
-A research company runs experiments that are powered by a simulation application and a visualization application. The simulation application runs on Linux and outputs intermediate data to an NFS share every 5 minutes. The visualization application is a Windows desktop application that displays the simulation output and requires an SMB file system.
-
-The company maintains two synchronized file systems. This strategy is causing data duplication and inefficient resource usage. The company needs to migrate the applications to AWS without making code changes to either application.
-
-Which solution will meet these requirements?
-
-A. Migrate both applications to AWS Lambda. Create an Amazon S3 bucket to exchange data between the applications.  
-B. Migrate both applications to Amazon Elastic Container Service (Amazon ECS). Configure Amazon FSx File Gateway for storage.  
-C. Migrate the simulation application to Linux Amazon EC2 instances. Migrate the visualization application to Windows EC2 instances. Configure Amazon Simple Queue Service (Amazon SQS) to exchange data between the applications.  
-D. Migrate the simulation application to Linux Amazon EC2 instances. Migrate the visualization application to Windows EC2 instances. Configure Amazon FSx for NetApp ONTAP for storage. ✅
 
 **Question**  236
 

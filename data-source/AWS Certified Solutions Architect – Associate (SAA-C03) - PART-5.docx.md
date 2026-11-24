@@ -1092,7 +1092,7 @@
 
 **Which combination of steps should the solutions architect take? (Choose two.)**
 
-**A. Use Amazon Kinesis Data Firehose to ingest the data.**
+**A. Use Amazon Kinesis Data Firehose to ingest the data. ✅**
 
 **B. Use AWS Lambda with AWS Step Functions to process the data.**
 
@@ -1147,6 +1147,8 @@
 **B. Enable IAM Access Analyzer for S3 to identify all S3 buckets that are not versioning-enabled across Regions.**
 
 **C. Create an S3 Multi-Region Access Point to identify all S3 buckets that are not versioning-enabled across Regions.**
+
+**D. Use S3 Inventory to identify all S3 buckets that are not versioning-enabled across Regions.**
 
 **────────────────────**
 
@@ -1856,24 +1858,6 @@
 **D. Use S3 Event Notifications to publish a message with image details to an Amazon Simple Notification Service (Amazon SNS) topic. Configure an AWS Elastic Beanstalk application to subscribe to the topic and to process the images.**
 
 **────────────────────────────────────**
-
-**Question 916**
-
-**A company wants to improve the availability and performance of its hybrid application. The application consists of a stateful TCP-based workload hosted on Amazon EC2 instances in different AWS Regions and a stateless UDP-based workload hosted on premises.**
-
-**Which combination of actions should a solutions architect take to improve availability and performance? (Choose two.)**
-
-**A. Create an accelerator using AWS Global Accelerator. Add the load balancers as endpoints. ✅**
-
-**B. Create an Amazon CloudFront distribution with an origin that uses Amazon Route 53 latency-based routing to route requests to the load balancers.**
-
-**C. Configure two Application Load Balancers in each Region. The first will route to the EC2 endpoints, and the second will route to the on-premises endpoints.**
-
-**D. Configure a Network Load Balancer in each Region to address the EC2 endpoints. Configure a Network Load Balancer in each Region that routes to the on-premises endpoints. ✅**
-
-**E. Configure a Network Load Balancer in each Region to address the EC2 endpoints. Configure an Application Load Balancer in each Region that routes to the on-premises endpoints.**
-
----
 
 **Question 916**
 
@@ -3186,13 +3170,21 @@ The company wants to ensure that the application running on EC2 instances can se
 
 Which solution will meet these requirements with the LEAST operational overhead?
 
-A. Create a gateway endpoint for Amazon S3 that is attached to the VPC. Update the IAM instance profile policy to provide access to only the specific buckets that the application needs.
+A. Create a gateway endpoint for Amazon S3 that is attached to the VPC. Update the IAM instance profile policy to provide access to only the specific buckets that the application needs. ✅
 
 B. Create a NAT gateway in a public subnet with a security group that allows access to only Amazon S3. Update the route tables to use the NAT Gateway.
 
-**C. Create a gateway endpoint for Amazon S3 that is attached to the VPUpdate the IAM instance profile policy with a Deny action and the following condition key:**
+C. Create a gateway endpoint for Amazon S3 that is attached to the VPC. Update the IAM instance profile policy with a Deny action and the following condition key:
+
+```
+"aws:PrincipalArn": "arn:aws:iam::*:role/EXAMPLE"
+```
 
 D. Create a NAT Gateway in a public subnet. Update route tables to use the NAT Gateway. Assign bucket policies for all buckets with a Deny action and the following condition key:
+
+```
+"aws:PrincipalArn": "arn:aws:iam::*:role/EXAMPLE"
+```
 
 ---
 
@@ -3280,10 +3272,6 @@ C. Amazon S3 Glacier Deep Archive
 
 D. Amazon S3 One Zone-Infrequent Access (S3 One Zone-IA)
 
-**C. Use Amazon EC2 instances in an Auto Scaling group behind an Application Load Balancer (ALB) to process videos. Store video content in Amazon S3 Standard. Use Amazon Simple Queue Service (Amazon SQS) for queuing and to decouple processing tasks. ✅**
-
-D. Deploy a containerized video processing application on Amazon Elastic Kubernetes Service (Amazon EKS) on Amazon EC2. Store video metadata in Amazon RDS in a single Availability Zone. Store video content in Amazon S3 Glacier Deep Archive.
-
 ---
 
 Question 1006
@@ -3314,7 +3302,7 @@ Which combination of steps will meet these requirements? (Choose two.)
 
 A. In Organizations, create a new tag policy that specifies the data sensitivity tag key and the required values. Enforce the tag values for the EC2 instances. Attach the tag policy to the appropriate OU.
 
-B. In Organizations, create a new service control policy (SCP) that specifies the data sensitivity tag key and the required tag values. Enforce the tag values for the EC2 instances. Attach the SCP to the appropriate OU.
+B. In Organizations, create a new service control policy (SCP) that specifies the data sensitivity tag key and the required tag values. Enforce the tag values for the EC2 instances. Attach the SCP to the appropriate OU. ✅
 
 C. Create a tag policy to deny running instances when a tag key is not specified. Create another tag policy that prevents identities from deleting tags. Attach the tag policies to the appropriate OU.
 

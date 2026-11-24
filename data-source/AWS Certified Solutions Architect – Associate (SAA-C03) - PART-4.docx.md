@@ -1630,15 +1630,13 @@ Which solutions to deploy the SCP will meet these requirements? (Choose two.)
 
 A. Attach the SCP to the root OU for the organization.
 
-B. Attach the SCP to the three nonproduction Organizations member accounts.
+B. Attach the SCP to the three nonproduction Organizations member accounts. ✅
 
 C. Attach the SCP to the Organizations management account.
 
 D. Create an OU for the production account. Attach the SCP to the OU. Move the production member account into the new OU.
 
 **E. Create an OU for the required accounts. Attach the SCP to the OU. Move the nonproduction member accounts into the new OU. ✅**
-
-**B. Attach the SCP to the three nonproduction Organizations member accounts. ✅**
 
 ---
 
@@ -2230,7 +2228,7 @@ A company migrated millions of archival files to Amazon S3. A solutions architec
 
 Which solution will meet these requirements?
 
-A. Create a list of unencrypted objects by filtering an Amazon S3 Inventory report. Configure an S3 Batch Operations job to encrypt the objects from the list with a server-side encryption with a customer-provided key (SSE-C). Configure the S3 default encryption feature to use a server-side encryption with a customer-provided key (SSE-C).
+A. Create a list of unencrypted objects by filtering an Amazon S3 Inventory report. Configure an S3 Batch Operations job to encrypt the objects from the list with a server-side encryption with a customer-provided key (SSE-C). Configure the S3 default encryption feature to use a server-side encryption with a customer-provided key (SSE-C). ✅
 
 B. Use S3 Storage Lens metrics to identify unencrypted S3 buckets. Configure the S3 default encryption feature to use a server-side encryption with AWS KMS keys (SSE-KMS).
 
@@ -2512,9 +2510,11 @@ Which solution will meet these requirements with the LEAST operational overhead?
 
 **A. Create an Object Lambda Access Point. Create an AWS Lambda function that redacts the PII when the function reads the file. Instruct the external service provider to access the Object Lambda Access Point. ✅**
 
-B. Create a batch process on an Amazon EC2 instance that regularly reads all new files, redacts the PII from the files, and writes the redacted files to a different S3 bucket. Instruct the external service provider to access the bucket that does not contain the PII. B. Create a web application on an Amazon EC2 instance that presents a list of the files, redacts the PII from the files, and allows the external service provider to download new versions of the files that have the PII redacted.
+B. Create a batch process on an Amazon EC2 instance that regularly reads all new files, redacts the PII from the files, and writes the redacted files to a different S3 bucket. Instruct the external service provider to access the bucket that does not contain the PII.
 
 C. Create an Amazon DynamoDB table. Create an AWS Lambda function that reads only the data in the files that does not contain PII. Configure the Lambda function to store the non-PII data in the DynamoDB table when a new file is written to Amazon S3. Grant the external service provider access to the DynamoDB table.
+
+D. Create a web application on an Amazon EC2 instance that presents a list of the files, redacts the PII from the files, and allows the external service provider to download new versions of the files that have the PII redacted.
 
 ---
 
