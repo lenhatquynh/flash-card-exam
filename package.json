@@ -3,9 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "packageManager": "npm@11.19.1",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint .",
     "parse:data": "node scripts/parse-questions.mjs",
@@ -23,6 +24,7 @@
     "lucide-react": "^1.79.0",
     "next": "^16.4.6",
     "pg": "^8.23.1",
+    "prisma": "^7.10.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "server-only": "^0.0.1",
@@ -43,7 +45,6 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.13.0",
     "postcss": "^8.5.33",
-    "prisma": "^7.10.1",
     "tsx": "^4.23.15",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.72.1"
