@@ -220,7 +220,7 @@ export function StudyView({ questions, state, onStateChange, onExit }: Props) {
             Previous
           </Button>
           <span className="tabular mx-auto text-sm text-ink-3">
-            {index + 1} of {questions.length}
+            {index + 1} / {questions.length}
           </span>
           {phase === 'answering' ? (
             <>
@@ -229,7 +229,7 @@ export function StudyView({ questions, state, onStateChange, onExit }: Props) {
                 onClick={reveal}
                 icon={<Eye className="size-4" />}
               >
-                Show answer
+                Show
               </Button>
               <Button
                 variant="primary"
@@ -237,7 +237,7 @@ export function StudyView({ questions, state, onStateChange, onExit }: Props) {
                 icon={<Check className="size-4" />}
                 disabled={selected.length === 0}
               >
-                Check answer
+                Check
               </Button>
             </>
           ) : (
