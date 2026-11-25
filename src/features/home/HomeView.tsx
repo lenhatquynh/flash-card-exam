@@ -1,7 +1,10 @@
+'use client'
+
 import { useMemo, useState } from 'react'
-import { BookOpen, Clock, RotateCcw, Timer } from 'lucide-react'
+import { BookOpen, Clock, LogOut, RotateCcw, Timer, UserRound } from 'lucide-react'
 import type { ExamResult, Question, StudyState } from '../../lib/types'
 import { Button } from '../../components/ui/Button'
+import { LinkButton } from '../../components/ui/LinkButton'
 import { Dialog } from '../../components/ui/Dialog'
 import { ProgressBar } from '../../components/ui/ProgressBar'
 
@@ -9,9 +12,10 @@ type Props = {
   questions: Question[]
   study: StudyState
   attempts: ExamResult[]
-  onStartStudy: () => void
-  onStartExam: () => void
+  /** The signed-in learner, or null when there is no account. */
+  username: string | null
   onResetProgress: () => void
+  onSignOut: () => void
 }
 
 /**
@@ -22,9 +26,9 @@ export function HomeView({
   questions,
   study,
   attempts,
-  onStartStudy,
-  onStartExam,
+  username,
   onResetProgress,
+  onSignOut,
 }: Props) {
   const [resetOpen, setResetOpen] = useState(false)
 
@@ -43,8 +47,24 @@ export function HomeView({
     <div className="min-h-svh bg-canvas">
       <header className="border-b border-line bg-surface">
         <div className="mx-auto flex max-w-4xl items-center gap-3 px-4 py-3">
-          <h1 className="text-base font-semibold text-ink">flash-card-exam</h1>
-          <span className="text-xs text-ink-3">AWS SAA-C03</span>
+          <h1 className="text-base font-semibold text-ink">SAA-C03 Exam</h1>
+          <div className="ml-auto flex items-center gap-2">
+            {username ? (
+              <>
+                <span className="flex items-center gap-1.5 text-xs text-ink-2">
+                  <UserRound className="size-3.5" aria-hidden="true" />
+                  <span className="max-w-[10rem] truncate">{username}</span>
+                </span>
+                <Button variant="ghost" size="sm" onClick={onSignOut} icon={<LogOut className="size-4" />}>
+                  Sign out
+                </Button>
+              </>
+            ) : (
+              <LinkButton href="/auth" variant="ghost" size="sm">
+                Sign in
+              </LinkButton>
+            )}
+          </div>
         </div>
       </header>
 
@@ -75,18 +95,12 @@ export function HomeView({
                 value={questions.length ? stats.studied / questions.length : 0}
                 label="Study progress"
               />
-              <p className="tabular mt-2 text-xs text-ink-3">
+              <p className="tabular my-2 text-xs text-ink-3">
                 {stats.known} knew it · {stats.unknown} did not
               </p>
-              <Button
-                variant="primary"
-                className="mt-4"
-                block
-                onClick={onStartStudy}
-                icon={<BookOpen className="size-4" />}
-              >
+              <LinkButton href="/study" variant="primary" block icon={<BookOpen className="size-4" />}>
                 Start studying
-              </Button>
+              </LinkButton>
             </div>
           </div>
 
@@ -98,21 +112,15 @@ export function HomeView({
             </p>
             <div className="mt-auto pt-2">
               {attempts.length > 0 ? (
-                <p className="text-sm text-ink-2">
+                <p className="mb-2 text-sm text-ink-2">
                   Last score {attempts[0].correct} of {attempts[0].scoredTotal} correct.
                 </p>
               ) : (
-                <p className="text-sm text-ink-2">No exam taken yet.</p>
+                <p className="mb-2 text-sm text-ink-2">No exam taken yet.</p>
               )}
-              <Button
-                variant="primary"
-                className="mt-4"
-                block
-                onClick={onStartExam}
-                icon={<Timer className="size-4" />}
-              >
+              <LinkButton href="/exam" variant="primary" block icon={<Timer className="size-4" />}>
                 Set up an exam
-              </Button>
+              </LinkButton>
             </div>
           </div>
         </section>
@@ -186,8 +194,9 @@ export function HomeView({
         }
       >
         <p>
-          This clears your study grades, your last exam setup, and your exam history from this browser.
-          The question bank itself is not affected.
+          This clears your study grades, your last exam setup, and your exam history
+          {username ? ' from your account' : ' from this browser'}. The question bank itself is not
+          affected.
         </p>
       </Dialog>
     </div>

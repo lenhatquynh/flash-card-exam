@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import Link from 'next/link'
 import { ChevronLeft, Check, X } from 'lucide-react'
 import { cn } from 'cn'
 import type { ExamResult, Question } from '../../lib/types'
@@ -9,7 +10,6 @@ import { OptionRow, type OptionState } from '../../components/ui/OptionRow'
 type Props = {
   result: ExamResult
   byId: Map<string, Question>
-  onExit: () => void
   onRetry: () => void
 }
 
@@ -17,7 +17,7 @@ type Props = {
  * The results screen. The score covers the scored questions only; the survey
  * questions are listed separately and never move the number.
  */
-export function ExamResults({ result, byId, onExit, onRetry }: Props) {
+export function ExamResults({ result, byId, onRetry }: Props) {
   const [filter, setFilter] = useState<'all' | 'incorrect' | 'unanswered'>('all')
 
   const scored = useMemo(() => result.answers.filter((a) => a.scored), [result.answers])
@@ -47,9 +47,13 @@ export function ExamResults({ result, byId, onExit, onRetry }: Props) {
     <div className="min-h-svh bg-canvas">
       <header className="border-b border-line bg-surface">
         <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-3">
-          <Button variant="ghost" size="sm" onClick={onExit} icon={<ChevronLeft className="size-4" />}>
+          <Link
+            href="/"
+            className="inline-flex h-8 items-center gap-1.5 rounded-md border border-transparent px-3 text-sm font-medium text-ink-2 transition-colors hover:bg-surface-2 hover:text-ink"
+          >
+            <ChevronLeft className="size-4" aria-hidden="true" />
             Home
-          </Button>
+          </Link>
           <h1 className="text-base font-semibold text-ink">Exam results</h1>
           <Button variant="secondary" size="sm" onClick={onRetry} className="ml-auto">
             Take another exam

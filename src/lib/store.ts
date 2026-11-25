@@ -1,5 +1,5 @@
 /**
- * localStorage persistence for the app.
+ * Browser-local persistence, used when the learner has no account.
  *
  * Everything lives under the `fce.v1` namespace in three keys:
  *
@@ -8,11 +8,14 @@
  *   fce.v1.exam.attempts the last 20 finished exams
  *
  * Every read is guarded: a missing key, unparseable JSON, or a value of the
- * wrong shape falls back to the default rather than throwing. Writes are
- * debounced so a fast learner does not hammer localStorage.
+ * wrong shape falls back to the default rather than throwing.
+ *
+ * A signed-in learner saves to Postgres instead; this file is the fallback
+ * for the paths that still need a local copy.
  */
 
 import type { ExamConfig, ExamResult, StudyGrade, StudyState } from './types'
+import { DEFAULT_EXAM_CONFIG, DEFAULT_STUDY_STATE } from './defaults'
 
 const NAMESPACE = 'fce.v1'
 
@@ -25,19 +28,7 @@ export const STORAGE_KEYS = {
 /** How many finished exams are kept in history. */
 export const MAX_ATTEMPTS = 20
 
-/** The exam setup a learner starts from when they have no saved one. */
-export const DEFAULT_EXAM_CONFIG: ExamConfig = {
-  scoredCount: 50,
-  surveyCount: 15,
-  durationMinutes: 130,
-  extraMinutes: 0,
-}
-
-export const DEFAULT_STUDY_STATE: StudyState = {
-  cursor: 0,
-  grades: {},
-  lastVisitedId: null,
-}
+export { DEFAULT_EXAM_CONFIG, DEFAULT_STUDY_STATE }
 
 function storage(): Storage | null {
   try {

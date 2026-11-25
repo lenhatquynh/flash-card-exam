@@ -1,0 +1,86 @@
+// The database schema for flash-card-exam.
+//
+// The question bank lives here so the browser bundle does not carry it, and
+// so a learner can be served a different slice of the bank without a rebuild.
+//
+// `grades` and `answers` are JSON documents on purpose: they are read and
+// written as a whole, never filtered question by question.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// A registered learner. The username is the only identifier they need.
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  study    StudyState?
+  config   ExamConfig?
+  attempts ExamAttempt[]
+}
+
+/// Study mode progress: where the learner was, and how they graded each
+/// question.
+model StudyState {
+  userId        String   @id
+  cursor        Int      @default(0)
+  /// Question id to the learner's own grade (`known` or `unknown`).
+  grades        Json     @default("{}")
+  lastVisitedId String?
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/// The exam setup the learner starts from.
+model ExamConfig {
+  userId          String   @id
+  scoredCount     Int      @default(50)
+  surveyCount     Int      @default(0)
+  durationMinutes Int      @default(130)
+  extraMinutes    Int      @default(0)
+  updatedAt       DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/// One finished practice exam.
+model ExamAttempt {
+  id             String   @id @default(cuid())
+  userId         String
+  finishedAt     DateTime @default(now())
+  correct        Int
+  scoredTotal    Int
+  surveyTotal    Int
+  timedOut       Boolean
+  elapsedSeconds Int
+  config         Json
+  answers        Json
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, finishedAt])
+}
+
+/// One question from the SAA-C03 bank.
+model Question {
+  id          String   @id
+  number      Int
+  part        String
+  stem        String
+  chooseCount Int      @default(1)
+  correct     String[]
+  options     Json
+  diagrams    Json
+
+  @@index([part])
+  @@index([number])
+}

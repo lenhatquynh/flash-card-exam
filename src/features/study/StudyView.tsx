@@ -1,7 +1,9 @@
+'use client'
+
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import Link from 'next/link'
 import { ChevronLeft, ChevronRight, Eye, ListChecks, Check, X } from 'lucide-react'
 import type { Question, StudyGrade, StudyState } from '../../lib/types'
-import { saveStudyState } from '../../lib/store'
 import { Button } from '../../components/ui/Button'
 import { ProgressBar } from '../../components/ui/ProgressBar'
 import type { OptionState } from '../../components/ui/OptionRow'
@@ -12,7 +14,6 @@ type Props = {
   questions: Question[]
   state: StudyState
   onStateChange: (next: StudyState) => void
-  onExit: () => void
 }
 
 type Phase = 'answering' | 'revealed'
@@ -22,8 +23,10 @@ type Phase = 'answering' | 'revealed'
  * learner either picks an answer and checks it, or reveals the answer
  * directly; either way they grade themselves.
  */
-export function StudyView({ questions, state, onStateChange, onExit }: Props) {
-  const [index, setIndex] = useState(() => Math.min(state.cursor, Math.max(0, questions.length - 1)))
+export function StudyView({ questions, state, onStateChange }: Props) {
+  const [index, setIndex] = useState(() =>
+    Math.min(state.cursor, Math.max(0, questions.length - 1)),
+  )
   const [selected, setSelected] = useState<string[]>([])
   const [phase, setPhase] = useState<Phase>('answering')
   const [navOpen, setNavOpen] = useState(false)
@@ -55,11 +58,6 @@ export function StudyView({ questions, state, onStateChange, onExit }: Props) {
     },
     [questions, onStateChange, state],
   )
-
-  // Persist whenever the position or a grade changes.
-  useEffect(() => {
-    saveStudyState(state)
-  }, [state])
 
   const choose = useCallback(
     (key: string) => {
@@ -144,10 +142,13 @@ export function StudyView({ questions, state, onStateChange, onExit }: Props) {
       <header className="sticky top-0 z-20 border-b border-line bg-surface/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-3">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <Button variant="ghost" size="sm" onClick={onExit} icon={<ChevronLeft className="size-4" />}>
+            <Link
+              href="/"
+              className="inline-flex h-8 items-center gap-1.5 rounded-md border border-transparent px-3 text-sm font-medium text-ink-2 transition-colors hover:bg-surface-2 hover:text-ink"
+            >
+              <ChevronLeft className="size-4" aria-hidden="true" />
               Home
-            </Button>
-            <h1 className="text-base font-semibold text-ink">Study</h1>
+            </Link>            <h1 className="text-base font-semibold text-ink">Study</h1>
             <div className="ml-auto flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-ink-2">
               <span className="tabular">
                 {stats.studied} of {questions.length} studied

@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
+import Link from 'next/link'
 import { ChevronLeft, Play } from 'lucide-react'
 import type { ExamConfig, Question } from '../../lib/types'
-import { DEFAULT_EXAM_CONFIG } from '../../lib/store'
+import { DEFAULT_EXAM_CONFIG } from '../../lib/defaults'
 import { Button } from '../../components/ui/Button'
 import { Field, NumberInput } from '../../components/ui/Field'
 
@@ -10,7 +11,6 @@ type Props = {
   /** The setup the learner used last time, if any. */
   remembered: ExamConfig
   onStart: (config: ExamConfig) => void
-  onExit: () => void
 }
 
 /**
@@ -18,7 +18,7 @@ type Props = {
  * will be, and the last run pre-filled so a returning learner starts from
  * where they left off.
  */
-export function ExamSetup({ questions, remembered, onStart, onExit }: Props) {
+export function ExamSetup({ questions, remembered, onStart }: Props) {
   const [config, setConfig] = useState<ExamConfig>(remembered)
 
   const set = (patch: Partial<ExamConfig>) => setConfig((prev) => ({ ...prev, ...patch }))
@@ -44,9 +44,13 @@ export function ExamSetup({ questions, remembered, onStart, onExit }: Props) {
     <div className="min-h-svh bg-canvas">
       <header className="border-b border-line bg-surface">
         <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-3">
-          <Button variant="ghost" size="sm" onClick={onExit} icon={<ChevronLeft className="size-4" />}>
+          <Link
+            href="/"
+            className="inline-flex h-8 items-center gap-1.5 rounded-md border border-transparent px-3 text-sm font-medium text-ink-2 transition-colors hover:bg-surface-2 hover:text-ink"
+          >
+            <ChevronLeft className="size-4" aria-hidden="true" />
             Home
-          </Button>
+          </Link>
           <h1 className="text-base font-semibold text-ink">Practice exam</h1>
         </div>
       </header>
